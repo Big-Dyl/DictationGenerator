@@ -78,12 +78,12 @@ class Note{
     mutate(simple){
         if(this.solfege >= 1){
             let index = Weights.skips[this.solfege - 1].pickRandom();
-            Weights.skips[this.solfege - 1][index] /= 2;
+            Weights.skips[this.solfege - 1][index] /= 3;
             Weights.skips[this.solfege - 1] = Weights.skips[this.solfege - 1].normalize();
             this.solfege = index + 1;
         } else {
             let index =  Weights.skips[8 - this.solfege].pickRandom();
-            Weights.skips[8 - this.solfege][index] /= 2;
+            Weights.skips[8 - this.solfege][index] /= 3;
             Weights.skips[8 - this.solfege] = Weights.skips[8 - this.solfege].normalize();
             this.solfege = index + 1;
         }
@@ -482,14 +482,9 @@ function Generate(){
     let simple = Math.random() < Weights.simpleTime;
     makeSong(simple ? 4 : 6);
     let key = major ? majorKeys[Math.floor(Math.random() * majorKeys.length)] : minorKeys[Math.floor(Math.random() * minorKeys.length)];
-    key = "F♯m"
     let pitches = transpose(Song, key, simple);
     document.getElementById("answer").innerHTML = pitches;
     document.getElementById("TS").innerHTML = simple ? "4/4" : "6/8";
     document.getElementById("Key").innerHTML = key;
     console.log(Song);
 }
-
-
-
-
