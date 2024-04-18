@@ -77,15 +77,15 @@ class Note{
     }
     mutate(simple){
         if(this.solfege >= 1){
-            let index = Weights.skips[this.solfege - 1].pickRandom()
-            this.solfege = index + 1;
+            let index = Weights.skips[this.solfege - 1].pickRandom();
             Weights.skips[this.solfege - 1][index] /= 2;
             Weights.skips[this.solfege - 1] = Weights.skips[this.solfege - 1].normalize();
+            this.solfege = index + 1;
         } else {
-            let index =  Weights.skips[8 - this.solfege].pickRandom()
+            let index =  Weights.skips[8 - this.solfege].pickRandom();
+            Weights.skips[8 - this.solfege][index] /= 2;
+            Weights.skips[8 - this.solfege] = Weights.skips[8 - this.solfege].normalize();
             this.solfege = index + 1;
-            Weights.skips[this.solfege - 1][index] /= 2;
-            Weights.skips[this.solfege - 1] = Weights.skips[this.solfege - 1].normalize();
         }
         this.solfege = this.solfege > 8 ? 8 - this.solfege + 1 : this.solfege;
         let index = simple ? Weights.simplerhythms.pickRandom() : Weights.compundrhythms.pickRandom();
@@ -209,6 +209,12 @@ function playOrder(song, key){
                     if(temp.includes("H")){
                         temp = "A" + temp.substring(1);
                     }
+                    if(temp.includes("Fb")){
+                        temp = "E" + temp.substring(2);
+                    }
+                    if(temp.includes("Cb")){
+                        temp = "B" + temp.substring(2);
+                    }
                 } else if (j == song[i].Notes.length - 1 && (solfege == 6 || solfege == 7|| solfege == 0 || solfege == -1) && (song[i+1].Notes[0].solfege > solfege)) {
                     if(temp.includes("b")) {
                         temp = temp.substring(0,1) + temp.substring(2,3);
@@ -217,6 +223,12 @@ function playOrder(song, key){
                     }
                     if(temp.includes("H")){
                         temp = "A" + temp.substring(1);
+                    }
+                    if(temp.includes("Fb")){
+                        temp = "E" + temp.substring(2);
+                    }
+                    if(temp.includes("Cb")){
+                        temp = "B" + temp.substring(2);
                     }
                 }
                 Notes.push(temp);
@@ -470,6 +482,7 @@ function Generate(){
     let simple = Math.random() < Weights.simpleTime;
     makeSong(simple ? 4 : 6);
     let key = major ? majorKeys[Math.floor(Math.random() * majorKeys.length)] : minorKeys[Math.floor(Math.random() * minorKeys.length)];
+    key = "F♯m"
     let pitches = transpose(Song, key, simple);
     document.getElementById("answer").innerHTML = pitches;
     document.getElementById("TS").innerHTML = simple ? "4/4" : "6/8";
